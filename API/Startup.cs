@@ -22,6 +22,14 @@ public class Startup
         
         services.AddDbContext<DataContext>(options =>
             options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+        
+        services.AddCors(opt=>{
+            opt.AddPolicy("CorsPolicy",policy=>
+            {
+                 policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+                policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://192.168.2.43:3000");
+            });
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,6 +51,8 @@ public class Startup
 
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseCors("CorsPolicy");
+        
         app.UseAuthorization();
         
         app.UseEndpoints(endpoints =>
