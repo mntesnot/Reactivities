@@ -10,7 +10,7 @@ function App() {
   const [activities,setActivities]=useState([]);
 
   useEffect(()=>{
-    axios.get('http://localhost:5000/api/Values').then(response=>{
+    axios.get('http://localhost:5000/api/activities').then(response=>{
       console.log(response);
       setActivities(response.data);
 
@@ -22,7 +22,7 @@ function App() {
       <List>
           {activities.map((avti:any) => (
             <ListItem key={avti.id}>
-              {avti.name}
+              {avti.title}
             </ListItem>
           ))}
         </List>

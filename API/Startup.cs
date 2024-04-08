@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Application.Activities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Persistence;
 
 public class Startup
@@ -18,7 +15,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        services.AddSwaggerGen();
+        //services.AddSwaggerGen();
         
         services.AddDbContext<DataContext>(options =>
             options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
@@ -27,9 +24,9 @@ public class Startup
             opt.AddPolicy("CorsPolicy",policy=>
             {
                  policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
-                policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://192.168.2.43:3000");
             });
         });
+        services.AddMediatR(typeof(List.Handler).Assembly);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,11 +34,11 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            //app.UseSwagger();
+            /*app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-            });
+            });*/
         }
         else
         {
